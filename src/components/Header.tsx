@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu, X, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -12,7 +12,14 @@ const Header = () => {
   const isMobile = useIsMobile();
   
   // Simulação de estado de login - em uma implementação real, isso viria de um contexto de autenticação
-  const isLoggedIn = location.pathname.includes("dashboard");
+  const isLoggedIn = location.pathname.includes("dashboard") || 
+                     location.pathname.includes("projects") ||
+                     location.pathname.includes("calendar") ||
+                     location.pathname.includes("messages") ||
+                     location.pathname.includes("statistics") ||
+                     location.pathname.includes("reports") ||
+                     location.pathname.includes("settings") ||
+                     location.pathname.includes("team");
 
   // Fechar o menu ao mudar de rota
   useEffect(() => {
@@ -83,8 +90,10 @@ const Header = () => {
             </Link>
           ) : (
             <>
-              <Link to="/login" className="hidden sm:block">
-                <Button variant="outline" size="sm">Entrar</Button>
+              <Link to="/login">
+                <Button variant="outline" size="sm" className="hidden sm:flex items-center gap-1">
+                  <LogIn className="h-4 w-4 mr-1" /> Entrar
+                </Button>
               </Link>
               <Link to="/cadastro">
                 <Button size="sm" className="bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity">
@@ -122,8 +131,8 @@ const Header = () => {
               Preços
             </Link>
             {!isLoggedIn && (
-              <Link to="/login" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
-                Entrar
+              <Link to="/login" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                <LogIn className="h-4 w-4" /> Entrar
               </Link>
             )}
           </nav>
