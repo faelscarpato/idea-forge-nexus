@@ -22,6 +22,29 @@
   </head>
 
   <body>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDkZSITG0sqDby4i3gG4FGx_mmMfbKfk_c",
+    authDomain: "nexusmind-a1d9b.firebaseapp.com",
+    projectId: "nexusmind-a1d9b",
+    storageBucket: "nexusmind-a1d9b.firebasestorage.app",
+    messagingSenderId: "295216639095",
+    appId: "1:295216639095:web:bf1a9638261458cecc6a72",
+    measurementId: "G-Q85TKMDPXS"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
