@@ -1,19 +1,26 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Search, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const isMobile = useIsMobile();
   
   // Simulação de estado de login - em uma implementação real, isso viria de um contexto de autenticação
   const isLoggedIn = location.pathname.includes("dashboard");
 
+  // Fechar o menu ao mudar de rota
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 dark:bg-nexus-dark/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-4 bg-white/80 dark:bg-nexus-dark/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50">
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <div className="relative">
@@ -63,8 +70,8 @@ const Header = () => {
           </NavigationMenu>
         </div>
 
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Button variant="ghost" size="icon" className="hidden sm:flex">
             <Search className="h-5 w-5" />
           </Button>
           
@@ -76,7 +83,7 @@ const Header = () => {
             </Link>
           ) : (
             <>
-              <Link to="/login">
+              <Link to="/login" className="hidden sm:block">
                 <Button variant="outline" size="sm">Entrar</Button>
               </Link>
               <Link to="/cadastro">
@@ -100,7 +107,7 @@ const Header = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-nexus-dark border-b border-slate-200 dark:border-slate-700 p-4">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-nexus-dark border-b border-slate-200 dark:border-slate-700 p-4 shadow-lg">
           <nav className="flex flex-col space-y-4">
             <Link to="/" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
               Início
@@ -114,6 +121,11 @@ const Header = () => {
             <Link to="/pricing" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
               Preços
             </Link>
+            {!isLoggedIn && (
+              <Link to="/login" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
+                Entrar
+              </Link>
+            )}
           </nav>
         </div>
       )}

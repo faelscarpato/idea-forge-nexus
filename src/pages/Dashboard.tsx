@@ -1,204 +1,319 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  BarChart,
+  Calendar,
+  FileText,
+  Home,
+  MessageSquare,
+  PieChart,
+  Search,
+  Settings,
+  Users,
+} from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Search, Plus, Users, Zap, Clock, Star, BrainCircuit } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import AIAssistant from "@/components/AIAssistant";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
+import AIIntegration from "@/components/AIIntegration";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarSeparator,
+  SidebarFooter,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 const Dashboard = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  
-  // Dados simulados de projetos
-  const recentProjects = [
-    {
-      id: 1,
-      name: "Estratégia de Expansão LATAM",
-      description: "Análise colaborativa para expansão de mercado na América Latina",
-      members: 8,
-      lastUpdated: "2h atrás",
-      progress: 65
-    },
-    {
-      id: 2,
-      name: "Pesquisa de UX do Produto",
-      description: "Análise colaborativa da experiência do usuário do novo produto",
-      members: 5,
-      lastUpdated: "Ontem",
-      progress: 30
-    },
-    {
-      id: 3,
-      name: "Metas ESG 2024",
-      description: "Definição colaborativa de metas ambientais, sociais e de governança",
-      members: 12,
-      lastUpdated: "3d atrás",
-      progress: 90
-    }
+  const [activeProject, setActiveProject] = useState("strategic-planning");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const projects = [
+    { id: "strategic-planning", name: "Planejamento Estratégico 2024" },
+    { id: "product-launch", name: "Lançamento de Produto" },
+    { id: "research-collaboration", name: "Colaboração em Pesquisa" },
   ];
 
-  const suggestedTopics = [
-    "Inovação de produtos", "Inteligência artificial", 
-    "Estratégia de marketing", "Transformação digital",
-    "Sustentabilidade", "Cultura organizacional"
-  ];
+  const filteredProjects = projects.filter((project) =>
+    project.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSelectProject = (projectId: string) => {
+    setActiveProject(projectId);
+    toast.success(`Projeto "${projects.find(p => p.id === projectId)?.name}" selecionado`);
+  };
+
+  const handleCreateNewProject = () => {
+    toast.info("Funcionalidade de criação de projeto em desenvolvimento");
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-      {/* Header para Dashboard */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 dark:bg-nexus-dark/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50">
-        <div className="container mx-auto flex items-center justify-between">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="relative">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-nexus-purple to-nexus-turquoise animate-pulse-slow flex items-center justify-center">
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <Sidebar>
+          <SidebarHeader className="flex items-center px-4 py-2">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-nexus-purple to-nexus-turquoise flex items-center justify-center">
                 <div className="w-4 h-4 rounded-full bg-white"></div>
               </div>
-              <div className="pulse-dot"></div>
+              <span className="text-xl font-display font-bold gradient-text">NexusMind</span>
             </div>
-            <span className="text-xl font-display font-bold gradient-text">NexusMind</span>
-          </Link>
+          </SidebarHeader>
 
-          <div className="flex-1 max-w-md mx-8">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                type="search" 
-                placeholder="Buscar projetos, insights, documentos..." 
-                className="pl-9 bg-slate-100 dark:bg-slate-800 border-none"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Plus size={16} /> Novo Projeto
-            </Button>
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupLabel>Principal</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton isActive={true} tooltip="Dashboard">
+                      <Home className="h-[1.2rem] w-[1.2rem]" />
+                      <span>Dashboard</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton tooltip="Projetos">
+                      <FileText className="h-[1.2rem] w-[1.2rem]" />
+                      <span>Projetos</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton tooltip="Calendário">
+                      <Calendar className="h-[1.2rem] w-[1.2rem]" />
+                      <span>Calendário</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton tooltip="Mensagens">
+                      <MessageSquare className="h-[1.2rem] w-[1.2rem]" />
+                      <span>Mensagens</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
             
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-nexus-purple to-nexus-turquoise flex items-center justify-center">
-              <span className="text-white font-medium">JP</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <div className="flex items-center justify-between mb-8">
-                <h1 className="text-2xl font-bold">Olá, João Paulo</h1>
-                <Button variant="ghost" size="sm" className="gap-1">
-                  <Clock size={16} /> Atividade recente
-                </Button>
-              </div>
-
-              {/* Recent Projects */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Projetos Recentes</h2>
-                  <Button variant="link" size="sm" asChild>
-                    <Link to="/projetos">Ver todos</Link>
-                  </Button>
+            <SidebarSeparator />
+            
+            <SidebarGroup>
+              <SidebarGroupLabel>Projetos</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <div className="px-2 my-2">
+                  <Input
+                    placeholder="Buscar projetos..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="h-8 text-sm"
+                  />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {recentProjects.map(project => (
-                    <div key={project.id} className="glass-card p-6 rounded-xl">
-                      <h3 className="font-bold mb-2">{project.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{project.description}</p>
-                      
-                      <div className="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full mb-4">
-                        <div 
-                          className="h-full bg-gradient-to-r from-nexus-purple to-nexus-turquoise rounded-full" 
-                          style={{ width: `${project.progress}%` }}
-                        ></div>
+                <ScrollArea className="h-40">
+                  <SidebarMenu>
+                    {filteredProjects.length > 0 ? (
+                      filteredProjects.map((project) => (
+                        <SidebarMenuItem key={project.id}>
+                          <SidebarMenuButton
+                            isActive={activeProject === project.id}
+                            onClick={() => handleSelectProject(project.id)}
+                          >
+                            <span>{project.name}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))
+                    ) : (
+                      <div className="px-2 py-1 text-sm text-muted-foreground">
+                        Nenhum projeto encontrado
                       </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Users size={16} className="text-muted-foreground" />
-                          <span className="text-sm text-muted-foreground">{project.members}</span>
-                        </div>
-                        <span className="text-sm text-muted-foreground">{project.lastUpdated}</span>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  <div className="glass-card p-6 rounded-xl flex flex-col items-center justify-center text-center border-dashed border-2 border-slate-200 dark:border-slate-700">
-                    <Plus size={24} className="text-muted-foreground mb-2" />
-                    <p className="text-muted-foreground mb-3">Iniciar um novo projeto</p>
-                    <Button size="sm" variant="outline">Criar Projeto</Button>
-                  </div>
-                </div>
+                    )}
+                  </SidebarMenu>
+                </ScrollArea>
+                
+                <Button 
+                  onClick={handleCreateNewProject}
+                  variant="outline" 
+                  className="w-full mt-2 text-sm h-8"
+                >
+                  Novo Projeto
+                </Button>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            
+            <SidebarSeparator />
+            
+            <SidebarGroup>
+              <SidebarGroupLabel>Análises</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton tooltip="Estatísticas">
+                      <BarChart className="h-[1.2rem] w-[1.2rem]" />
+                      <span>Estatísticas</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton tooltip="Relatórios">
+                      <PieChart className="h-[1.2rem] w-[1.2rem]" />
+                      <span>Relatórios</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Configurações">
+                  <Settings className="h-[1.2rem] w-[1.2rem]" />
+                  <span>Configurações</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Equipe">
+                  <Users className="h-[1.2rem] w-[1.2rem]" />
+                  <span>Equipe</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+        
+        <SidebarInset>
+          <Header />
+          <div className="container mx-auto px-4 py-8 pt-24">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-2xl font-bold">Dashboard</h1>
+                <p className="text-muted-foreground">
+                  Bem-vindo ao seu painel de inteligência coletiva.
+                </p>
               </div>
-              
-              {/* Quick Actions */}
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">Ações Rápidas</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-3">
-                    <Users size={20} />
-                    <span>Convidar Membros</span>
-                  </Button>
-                  <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-3">
-                    <BrainCircuit size={20} />
-                    <span>Explorar Insights</span>
-                  </Button>
-                  <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-3">
-                    <Zap size={20} />
-                    <span>Consultar IA</span>
-                  </Button>
-                </div>
-              </div>
+              <SidebarTrigger />
             </div>
             
-            <div>
-              {/* Knowledge Graph */}
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">Seu Grafo de Conhecimento</h2>
-                <div className="glass-card overflow-hidden rounded-xl p-4 h-[300px]">
-                  <KnowledgeGraph />
-                </div>
-              </div>
+            <Tabs defaultValue="overview">
+              <TabsList className="mb-6">
+                <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+                <TabsTrigger value="projects">Projetos</TabsTrigger>
+                <TabsTrigger value="ai-tools">Ferramentas IA</TabsTrigger>
+                <TabsTrigger value="insights">Insights</TabsTrigger>
+              </TabsList>
               
-              {/* Recent Insights */}
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">Insights Recentes</h2>
-                <div className="glass-card p-4 rounded-xl space-y-4">
-                  <div className="flex items-start gap-3 p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                    <Zap className="text-nexus-purple shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm">Detectada correlação entre feedback dos clientes e métricas de retenção no projeto <span className="font-medium text-nexus-purple">Pesquisa de UX</span>.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                    <Zap className="text-nexus-purple shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm">Descoberta tendência crescente de interesse em sustentabilidade nos últimos 6 meses no projeto <span className="font-medium text-nexus-purple">Metas ESG</span>.</p>
-                    </div>
-                  </div>
+              <TabsContent value="overview">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Projeto Ativo</CardTitle>
+                      <CardDescription>
+                        {projects.find(p => p.id === activeProject)?.name}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <KnowledgeGraph />
+                    </CardContent>
+                    <CardFooter className="flex justify-between">
+                      <Button variant="outline" size="sm">Ver Detalhes</Button>
+                      <Button size="sm">Colaborar</Button>
+                    </CardFooter>
+                  </Card>
+                  
+                  <AIAssistant />
                 </div>
-              </div>
+              </TabsContent>
               
-              {/* Suggested Topics */}
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Tópicos Sugeridos</h2>
-                <div className="flex flex-wrap gap-2">
-                  {suggestedTopics.map((topic, index) => (
-                    <Button key={index} variant="outline" size="sm" className="rounded-full">
-                      {topic}
-                    </Button>
+              <TabsContent value="projects">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {projects.map((project) => (
+                    <Card key={project.id} className={`${project.id === activeProject ? 'border-nexus-purple' : ''}`}>
+                      <CardHeader>
+                        <CardTitle>{project.name}</CardTitle>
+                        <CardDescription>
+                          Último acesso: há 2 dias
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between text-sm">
+                            <span>Progresso</span>
+                            <span className="font-medium">67%</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-nexus-purple to-nexus-turquoise" 
+                              style={{ width: '67%' }}
+                            ></div>
+                          </div>
+                          
+                          <div className="pt-4 space-y-2">
+                            <div className="flex items-center justify-between text-sm">
+                              <span>Colaboradores</span>
+                              <span>12</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span>Ideias</span>
+                              <span>48</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span>Decisões</span>
+                              <span>7</span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        <Button
+                          className="w-full bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity"
+                          onClick={() => handleSelectProject(project.id)}
+                        >
+                          Acessar Projeto
+                        </Button>
+                      </CardFooter>
+                    </Card>
                   ))}
                 </div>
-              </div>
-            </div>
+              </TabsContent>
+              
+              <TabsContent value="ai-tools">
+                <AIIntegration />
+              </TabsContent>
+              
+              <TabsContent value="insights">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Insights</CardTitle>
+                    <CardDescription>Análises e tendências baseadas nos dados dos seus projetos</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-center py-10">
+                      <p className="text-muted-foreground text-center">
+                        Análises avançadas estarão disponíveis conforme você utiliza a plataforma.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
-        </div>
-      </main>
-    </div>
+          <Footer />
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 };
 

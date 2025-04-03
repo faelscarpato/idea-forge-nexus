@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Calendar, Search, Network, Users, Database, Lock } from "lucide-react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import FeatureCard from "@/components/FeatureCard";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
 import AIAssistant from "@/components/AIAssistant";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -28,12 +30,14 @@ const Index = () => {
                 NexusMind é uma plataforma revolucionária que permite que comunidades resolvam problemas complexos através da colaboração potencializada por inteligência artificial.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity">
-                  Solicitar acesso
+                <Button asChild size="lg" className="bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity">
+                  <Link to="/cadastro">Solicitar acesso</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2">
-                  <Search size={18} />
-                  Como funciona
+                <Button asChild size="lg" variant="outline" className="gap-2">
+                  <Link to="/how-it-works">
+                    <Search size={18} />
+                    Como funciona
+                  </Link>
                 </Button>
               </div>
               <div className="mt-8 flex items-center gap-2 text-sm text-muted-foreground">
@@ -165,11 +169,11 @@ const Index = () => {
                 Acesso inicial limitado a comunidades com problemas complexos e relevantes para resolver. Junte-se à lista de espera para estar entre os primeiros a experimentar.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity">
-                  Solicitar acesso
+                <Button asChild size="lg" className="bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity">
+                  <Link to="/cadastro">Solicitar acesso</Link>
                 </Button>
-                <Button size="lg" variant="outline">
-                  Agendar demonstração
+                <Button asChild size="lg" variant="outline">
+                  <Link to="/schedule-demo">Agendar demonstração</Link>
                 </Button>
               </div>
             </div>
@@ -177,59 +181,7 @@ const Index = () => {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-slate-50 dark:bg-slate-900 py-12 border-t border-slate-200 dark:border-slate-800">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-nexus-purple to-nexus-turquoise flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-white"></div>
-                </div>
-                <span className="font-display font-bold">NexusMind</span>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                Transformando colaboração com inteligência artificial
-              </p>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Produto</h3>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Funcionalidades</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Preços</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Demonstração</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Roadmap</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Recursos</h3>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Documentação</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Blog</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Casos de uso</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Webinars</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Empresa</h3>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Sobre nós</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Contato</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Política de privacidade</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-nexus-purple transition-colors">Termos de serviço</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-200 dark:border-slate-800 mt-12 pt-6 text-sm text-muted-foreground flex flex-col md:flex-row justify-between items-center">
-            <p>© 2023 NexusMind. Todos os direitos reservados.</p>
-            <div className="flex gap-4 mt-4 md:mt-0">
-              <a href="#" className="hover:text-nexus-purple transition-colors">Twitter</a>
-              <a href="#" className="hover:text-nexus-purple transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-nexus-purple transition-colors">GitHub</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 };
