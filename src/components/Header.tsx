@@ -1,9 +1,17 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
+import { Search, Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  
+  // Simulação de estado de login - em uma implementação real, isso viria de um contexto de autenticação
+  const isLoggedIn = location.pathname.includes("dashboard");
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 dark:bg-nexus-dark/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-700/50">
       <div className="container mx-auto flex items-center justify-between">
@@ -17,23 +25,98 @@ const Header = () => {
           <span className="text-xl font-display font-bold gradient-text">NexusMind</span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-sm font-medium hover:text-nexus-purple transition-colors">Início</Link>
-          <Link to="/discover" className="text-sm font-medium hover:text-nexus-purple transition-colors">Descobrir</Link>
-          <Link to="/how-it-works" className="text-sm font-medium hover:text-nexus-purple transition-colors">Como funciona</Link>
-          <Link to="/pricing" className="text-sm font-medium hover:text-nexus-purple transition-colors">Preços</Link>
+        <div className="hidden md:block">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link to="/">
+                  <NavigationMenuLink className={`text-sm font-medium px-4 py-2 hover:text-nexus-purple transition-colors ${location.pathname === '/' ? 'text-nexus-purple' : ''}`}>
+                    Início
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/discover">
+                  <NavigationMenuLink className={`text-sm font-medium px-4 py-2 hover:text-nexus-purple transition-colors ${location.pathname === '/discover' ? 'text-nexus-purple' : ''}`}>
+                    Descobrir
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/how-it-works">
+                  <NavigationMenuLink className={`text-sm font-medium px-4 py-2 hover:text-nexus-purple transition-colors ${location.pathname === '/how-it-works' ? 'text-nexus-purple' : ''}`}>
+                    Como funciona
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/pricing">
+                  <NavigationMenuLink className={`text-sm font-medium px-4 py-2 hover:text-nexus-purple transition-colors ${location.pathname === '/pricing' ? 'text-nexus-purple' : ''}`}>
+                    Preços
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
 
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon">
             <Search className="h-5 w-5" />
           </Button>
-          <Button variant="outline" size="sm">Entrar</Button>
-          <Button size="sm" className="bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity">
-            Solicitar acesso
+          
+          {isLoggedIn ? (
+            <Link to="/dashboard">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-nexus-purple to-nexus-turquoise flex items-center justify-center">
+                <span className="text-white font-medium">JP</span>
+              </div>
+            </Link>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="outline" size="sm">Entrar</Button>
+              </Link>
+              <Link to="/cadastro">
+                <Button size="sm" className="bg-gradient-to-r from-nexus-purple to-nexus-turquoise hover:opacity-90 transition-opacity">
+                  Solicitar acesso
+                </Button>
+              </Link>
+            </>
+          )}
+
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-nexus-dark border-b border-slate-200 dark:border-slate-700 p-4">
+          <nav className="flex flex-col space-y-4">
+            <Link to="/" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
+              Início
+            </Link>
+            <Link to="/discover" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
+              Descobrir
+            </Link>
+            <Link to="/how-it-works" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
+              Como funciona
+            </Link>
+            <Link to="/pricing" className="text-sm font-medium py-2 hover:text-nexus-purple transition-colors" onClick={() => setIsMenuOpen(false)}>
+              Preços
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
